@@ -1,4 +1,4 @@
 package br.ufpb.dce.aps.coffeemachine;
 
-public class FrontPanel {
+public interface CoffeeMachine {
 }
