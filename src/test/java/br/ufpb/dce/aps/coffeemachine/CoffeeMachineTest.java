@@ -20,6 +20,7 @@ public abstract class CoffeeMachineTest {
 	private Dispenser cupDispenser;
 	private DrinkDispenser drinkDispenser;
 	private Dispenser sugarDispenser;
+	private Dispenser creamerDispenser;
 
 	protected abstract CoffeeMachine createFacade(ComponentsFactory factory);
 
@@ -33,6 +34,7 @@ public abstract class CoffeeMachineTest {
 		cupDispenser = factory.getCupDispenser();
 		drinkDispenser = factory.getDrinkDispenser();
 		sugarDispenser = factory.getSugarDispenser();
+		creamerDispenser = factory.getCreamerDispenser();
 	}
 
 	@After
@@ -354,6 +356,37 @@ public abstract class CoffeeMachineTest {
 		verifyOutOfIngredient(inOrder, Messages.OUT_OF_CUP, Coin.quarter, Coin.dime);
 	}
 
+	@Test
+	public void selectWhiteWithoutChange() {
+		InOrder inOrder = prepareScenarioWithCoins(Coin.quarter, Coin.dime);
+
+		// Simulating returns
+		doContainWhiteIngredients();
+
+		// Operation under test
+		facade.select(Drink.WHITE);
+
+		// Verification
+		verifyWhitePlan(inOrder);
+		verifyWhiteMix(inOrder);
+		verifyDrinkRelease(inOrder);
+	}
+
+	private void doContainWhiteIngredients() {
+		doContainBlackIngredients();
+		doContain(creamerDispenser, anyDouble());
+	}
+
+	private void verifyWhitePlan(InOrder inOrder) {
+		verifyBlackPlan(inOrder);
+		inOrder.verify(creamerDispenser).contains(anyDouble());
+	}
+
+	private void verifyWhiteMix(InOrder inOrder) {
+		verifyBlackMix(inOrder);
+		inOrder.verify(creamerDispenser).release(anyDouble());
+	}
+
 	
 	private void verifyOutOfIngredient(InOrder inOrder, String message,
 			Coin... coins) {
@@ -405,7 +438,7 @@ public abstract class CoffeeMachineTest {
 
 	private Object[] mocks() {
 		return asArray(display, cashBox, coffeePowderDispenser, waterDispenser,
-				cupDispenser, drinkDispenser, sugarDispenser);
+				cupDispenser, drinkDispenser, sugarDispenser, creamerDispenser);
 	}
 
 	private Object[] asArray(Object... objs) {

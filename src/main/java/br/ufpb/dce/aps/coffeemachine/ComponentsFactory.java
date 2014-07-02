@@ -16,4 +16,6 @@ public interface ComponentsFactory {
 
 	Dispenser getSugarDispenser();
 
+	Dispenser getCreamerDispenser();
+
 }

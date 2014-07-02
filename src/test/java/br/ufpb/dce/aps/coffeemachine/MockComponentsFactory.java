@@ -11,6 +11,7 @@ public class MockComponentsFactory implements ComponentsFactory {
 	private static final String WATER = "water";
 	private static final String CUP = "cup";
 	private static final String SUGAR = "sugar";
+	private static final String CREAMER = "creamer";
 
 	private Display display;
 	private CashBox cashBox;
@@ -63,6 +64,10 @@ public class MockComponentsFactory implements ComponentsFactory {
 
 	public Dispenser getSugarDispenser() {
 		return getDispenser(SUGAR);
+	}
+
+	public Dispenser getCreamerDispenser() {
+		return getDispenser(CREAMER);
 	}
 
 }
