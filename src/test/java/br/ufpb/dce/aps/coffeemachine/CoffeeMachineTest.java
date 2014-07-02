@@ -117,9 +117,7 @@ public abstract class CoffeeMachineTest {
 		facade.cancel();
 
 		// Verification
-		verifyCancelMessage(inOrder);
-		verifyReleaseCoins(inOrder, Coin.halfDollar);
-		verifyNewSession(inOrder);
+		verifyCancel(inOrder, Coin.halfDollar);
 	}
 
 	private InOrder prepareScenarioWithCoins(Coin... coins) {
@@ -136,9 +134,7 @@ public abstract class CoffeeMachineTest {
 		facade.cancel();
 
 		// Verification
-		verifyCancelMessage(inOrder);
-		verifyReleaseCoins(inOrder, Coin.nickel, Coin.penny);
-		verifyNewSession(inOrder);
+		verifyCancel(inOrder, Coin.nickel, Coin.penny);
 	}
 
 	@Test
@@ -191,10 +187,7 @@ public abstract class CoffeeMachineTest {
 	@Test
 	public void twoDrinks() {
 		// Preparing scenario: first drink
-		facade = createFacade(factory);
-		insertCoins(Coin.quarter, Coin.dime);
-		doContainBlackIngredients();
-		facade.select(Drink.BLACK);
+		validSession(Drink.BLACK, Coin.dime, Coin.quarter);
 
 		// Preparing scenario: second drink
 		insertCoins(Coin.dime, Coin.quarter);
@@ -210,6 +203,23 @@ public abstract class CoffeeMachineTest {
 		verifyBlackSugarPlan(inOrder);
 		verifyBlackSugarMix(inOrder);
 		verifyDrinkRelease(inOrder);
+	}
+
+	@SuppressWarnings("incomplete-switch")
+	private void validSession(Drink drink, Coin... coins) {
+		facade = createFacade(factory);
+		insertCoins(coins);
+		
+		switch (drink) {
+		case BLACK:
+			doContainBlackIngredients();
+			break;
+		case BLACK_SUGAR:
+			doContainBlackSugarIngredients();
+			break;
+		}
+		
+		facade.select(drink);
 	}
 	
 	private void doContainBlackSugarIngredients() {
@@ -227,7 +237,29 @@ public abstract class CoffeeMachineTest {
 		inOrder.verify(sugarDispenser).release(anyDouble());
 	}
 	
+	@Test
+	public void drinkAndCancel() {
+		// Preparing scenario: first drink
+		validSession(Drink.BLACK_SUGAR, Coin.dime, Coin.quarter);
 
+		// Preparing scenario: before cancel
+		insertCoins(Coin.dollar);
+		InOrder inOrder = resetMocks();
+		
+		// Operation under test
+		facade.cancel();
+		
+		// Verification
+		verifyCancel(inOrder, Coin.dollar);
+	}
+
+	private void verifyCancel(InOrder inOrder, Coin... change) {
+		verifyCancelMessage(inOrder);
+		verifyReleaseCoins(inOrder, change);
+		verifyNewSession(inOrder);
+	}
+
+	
 
 	private void doContain(Dispenser dispenser, Object amount) {
 		when(dispenser.contains(amount)).thenReturn(true);
