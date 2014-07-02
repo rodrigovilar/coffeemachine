@@ -322,7 +322,24 @@ public abstract class CoffeeMachineTest {
 		verifyOutOfIngredient(inOrder, Messages.OUT_OF_SUGAR, Coin.halfDollar);
 	}
 	
+	@Test 
+	public void selectBlackWithoutWater() {
+		InOrder inOrder = prepareScenarioWithCoins(Coin.quarter, Coin.dime);
 
+		// Simulating returns
+		doNotContain(waterDispenser, anyDouble()); //Out of Water
+		doContain(cupDispenser, 1);
+
+		// Operation under test
+		facade.select(Drink.BLACK);
+
+		// Verification
+		inOrder.verify(cupDispenser).contains(1);
+		inOrder.verify(waterDispenser).contains(anyDouble());
+		verifyOutOfIngredient(inOrder, Messages.OUT_OF_WATER, Coin.quarter, Coin.dime);
+	}
+
+	
 	private void verifyOutOfIngredient(InOrder inOrder, String message,
 			Coin... coins) {
 		inOrder.verify(display).warn(message);
