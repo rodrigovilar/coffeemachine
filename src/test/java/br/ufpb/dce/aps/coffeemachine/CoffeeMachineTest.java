@@ -1,10 +1,10 @@
 package br.ufpb.dce.aps.coffeemachine;
 
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 
 
 public abstract class CoffeeMachineTest {
@@ -13,6 +13,7 @@ public abstract class CoffeeMachineTest {
 	private CoffeeMachine facade; 
 	
 	private Display display;
+	private CashBox cashBox; 
 
 	protected abstract CoffeeMachine createFacade(ComponentsFactory factory);
 
@@ -20,6 +21,7 @@ public abstract class CoffeeMachineTest {
 	public void init() {
 		factory = new MockComponentsFactory();
 		display = factory.getDisplay();
+		cashBox = factory.getCashBox();
 	}
 	
 	@Test
@@ -79,9 +81,34 @@ public abstract class CoffeeMachineTest {
 		facade.cancel();
 	}
 
+	@Test
+	public void cancelWithOneCoin() {
+		//Preparing scenario
+		facade = createFacade(factory);
+		facade.insertCoin(Coin.halfDollar);
+		InOrder inOrder = resetMocks();
+
+		//Operation under test
+		facade.cancel();
+		
+		//Verification
+		inOrder.verify(display).warn(Messages.CANCEL_MESSAGE);
+		inOrder.verify(cashBox).release(Coin.halfDollar);
+		inOrder.verify(display).info(Messages.INSERT_COINS_MESSAGE);
+	}
+
 	
-	private void resetMocks() {
-		reset(display);
+	private InOrder resetMocks() {
+		reset(mocks());
+		return inOrder(mocks());
+	}
+
+	private Object[] mocks() {
+		return asArray(display, cashBox);
+	}
+
+	private Object[] asArray(Object... objs) {
+		return objs;
 	}
 
 }

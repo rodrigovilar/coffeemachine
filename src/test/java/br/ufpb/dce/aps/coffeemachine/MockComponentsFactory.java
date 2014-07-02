@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 public class MockComponentsFactory implements ComponentsFactory {
 
 	private Display display;
+	private CashBox cashBox;
 
 	public Display getDisplay() {
 		if (display == null) {
@@ -12,6 +13,14 @@ public class MockComponentsFactory implements ComponentsFactory {
 		}
 
 		return display;
+	}
+
+	public CashBox getCashBox() {
+		if (cashBox == null) {
+			cashBox = mock(CashBox.class);
+		}
+
+		return cashBox;
 	}
 
 }
