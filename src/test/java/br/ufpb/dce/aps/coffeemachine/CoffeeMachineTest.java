@@ -59,6 +59,16 @@ public abstract class CoffeeMachineTest {
 		verify(display).info("Total: US$ 0.55");
 	}
 	
+	@Test(expected=CoffeeMachineException.class)
+	public void nullCoin() {
+		// Preparing scenario
+		facade = createFacade(factory);
+		resetMocks();
+		
+		// Operation under test
+		facade.insertCoin(null);
+	}
+	
 	private void resetMocks() {
 		reset(display);
 	}
