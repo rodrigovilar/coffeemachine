@@ -69,6 +69,17 @@ public abstract class CoffeeMachineTest {
 		facade.insertCoin(null);
 	}
 	
+	@Test(expected=CoffeeMachineException.class)
+	public void cancelWithoutCoins() {
+		//Preparing scenario
+		facade = createFacade(factory);
+		resetMocks();
+
+		//Operation under test
+		facade.cancel();
+	}
+
+	
 	private void resetMocks() {
 		reset(display);
 	}
