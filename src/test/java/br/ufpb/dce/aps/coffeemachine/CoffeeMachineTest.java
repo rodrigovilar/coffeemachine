@@ -286,8 +286,7 @@ public abstract class CoffeeMachineTest {
 		InOrder inOrder = prepareScenarioWithCoins(Coin.quarter, Coin.dime);
 
 		// Simulating returns
-		doNotContain(coffeePowderDispenser, anyDouble()); // Out of Coffee
-															// powder!
+		doNotContain(coffeePowderDispenser, anyDouble()); // Out of Coffee powder!
 		doContain(waterDispenser, anyDouble());
 		doContain(cupDispenser, 1);
 
@@ -301,6 +300,28 @@ public abstract class CoffeeMachineTest {
 		verifyOutOfIngredient(inOrder, Messages.OUT_OF_COFFEE_POWDER,
 				Coin.quarter, Coin.dime);
 	}
+
+	@Test 
+	public void selectBlackWithoutSugar() {
+		InOrder inOrder = prepareScenarioWithCoins(Coin.halfDollar);
+
+		// Simulating returns
+		doContain(coffeePowderDispenser, anyDouble());
+		doContain(waterDispenser, anyDouble());
+		doContain(cupDispenser, 1);
+		doNotContain(sugarDispenser, anyDouble()); //Out of Sugar
+
+		// Operation under test
+		facade.select(Drink.BLACK_SUGAR);
+
+		// Verification
+		inOrder.verify(cupDispenser).contains(1);
+		inOrder.verify(waterDispenser).contains(anyDouble());
+		inOrder.verify(coffeePowderDispenser).contains(anyDouble());
+		inOrder.verify(sugarDispenser).contains(anyDouble());
+		verifyOutOfIngredient(inOrder, Messages.OUT_OF_SUGAR, Coin.halfDollar);
+	}
+	
 
 	private void verifyOutOfIngredient(InOrder inOrder, String message,
 			Coin... coins) {

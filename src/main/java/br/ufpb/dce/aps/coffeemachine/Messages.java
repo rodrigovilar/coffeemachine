@@ -8,5 +8,6 @@ public interface Messages {
 	public static final String TAKE_DRINK = "Please, take your drink.";
 	public static final String RELEASING = "Releasing drink.";
 	public static final String OUT_OF_COFFEE_POWDER = "Out of Coffee Powder";
+	public static final String OUT_OF_SUGAR = "Out of Sugar";
 
 }
