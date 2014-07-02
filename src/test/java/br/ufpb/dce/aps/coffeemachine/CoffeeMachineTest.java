@@ -34,12 +34,11 @@ public abstract class CoffeeMachineTest {
 		drinkDispenser = factory.getDrinkDispenser();
 		sugarDispenser = factory.getSugarDispenser();
 	}
-	
+
 	@After
 	public void genericVerifications() {
 		verifyNoMoreInteractions(mocks());
 	}
-
 
 	@Test
 	public void createFacade() {
@@ -183,7 +182,7 @@ public abstract class CoffeeMachineTest {
 		inOrder.verify(coffeePowderDispenser).release(anyDouble());
 		inOrder.verify(waterDispenser).release(anyDouble());
 	}
-	
+
 	@Test
 	public void twoDrinks() {
 		// Preparing scenario: first drink
@@ -192,13 +191,13 @@ public abstract class CoffeeMachineTest {
 		// Preparing scenario: second drink
 		insertCoins(Coin.dime, Coin.quarter);
 		InOrder inOrder = resetMocks();
-		
+
 		// Simulating returns
 		doContainBlackSugarIngredients();
-		
+
 		// Operation under test
 		facade.select(Drink.BLACK_SUGAR);
-		
+
 		// Verification
 		verifyBlackSugarPlan(inOrder);
 		verifyBlackSugarMix(inOrder);
@@ -209,7 +208,7 @@ public abstract class CoffeeMachineTest {
 	private void validSession(Drink drink, Coin... coins) {
 		facade = createFacade(factory);
 		insertCoins(coins);
-		
+
 		switch (drink) {
 		case BLACK:
 			doContainBlackIngredients();
@@ -218,10 +217,10 @@ public abstract class CoffeeMachineTest {
 			doContainBlackSugarIngredients();
 			break;
 		}
-		
+
 		facade.select(drink);
 	}
-	
+
 	private void doContainBlackSugarIngredients() {
 		doContainBlackIngredients();
 		doContain(sugarDispenser, anyDouble());
@@ -236,7 +235,7 @@ public abstract class CoffeeMachineTest {
 		verifyBlackMix(inOrder);
 		inOrder.verify(sugarDispenser).release(anyDouble());
 	}
-	
+
 	@Test
 	public void drinkAndCancel() {
 		// Preparing scenario: first drink
@@ -245,10 +244,10 @@ public abstract class CoffeeMachineTest {
 		// Preparing scenario: before cancel
 		insertCoins(Coin.dollar);
 		InOrder inOrder = resetMocks();
-		
+
 		// Operation under test
 		facade.cancel();
-		
+
 		// Verification
 		verifyCancel(inOrder, Coin.dollar);
 	}
@@ -269,22 +268,53 @@ public abstract class CoffeeMachineTest {
 		// Preparing scenario: before select
 		insertCoins(Coin.dime, Coin.quarter);
 		InOrder inOrder = resetMocks();
-		
+
 		// Simulating returns
 		doContainBlackIngredients();
 
 		// Operation under test
 		facade.select(Drink.BLACK);
-		
+
 		// Verification
 		verifyBlackPlan(inOrder);
 		verifyBlackMix(inOrder);
 		verifyDrinkRelease(inOrder);
 	}
-	
+
+	@Test
+	public void selectBlackWithoutCoffeePowder() {
+		InOrder inOrder = prepareScenarioWithCoins(Coin.quarter, Coin.dime);
+
+		// Simulating returns
+		doNotContain(coffeePowderDispenser, anyDouble()); // Out of Coffee
+															// powder!
+		doContain(waterDispenser, anyDouble());
+		doContain(cupDispenser, 1);
+
+		// Operation under test
+		facade.select(Drink.BLACK);
+
+		// Verification
+		inOrder.verify(cupDispenser).contains(1);
+		inOrder.verify(waterDispenser).contains(anyDouble());
+		inOrder.verify(coffeePowderDispenser).contains(anyDouble());
+		verifyOutOfIngredient(inOrder, Messages.OUT_OF_COFFEE_POWDER,
+				Coin.quarter, Coin.dime);
+	}
+
+	private void verifyOutOfIngredient(InOrder inOrder, String message,
+			Coin... coins) {
+		inOrder.verify(display).warn(message);
+		verifyReleaseCoins(inOrder, coins);
+		verifyNewSession(inOrder);
+	}
 
 	private void doContain(Dispenser dispenser, Object amount) {
 		when(dispenser.contains(amount)).thenReturn(true);
+	}
+
+	private void doNotContain(Dispenser dispenser, Object amount) {
+		when(dispenser.contains(amount)).thenReturn(false);
 	}
 
 	private void verifyDrinkRelease(InOrder inOrder) {
