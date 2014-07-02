@@ -3,6 +3,7 @@ package br.ufpb.dce.aps.coffeemachine;
 import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Mockito.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -18,6 +19,7 @@ public abstract class CoffeeMachineTest {
 	private Dispenser waterDispenser;
 	private Dispenser cupDispenser;
 	private DrinkDispenser drinkDispenser;
+	private Dispenser sugarDispenser;
 
 	protected abstract CoffeeMachine createFacade(ComponentsFactory factory);
 
@@ -30,7 +32,14 @@ public abstract class CoffeeMachineTest {
 		waterDispenser = factory.getWaterDispenser();
 		cupDispenser = factory.getCupDispenser();
 		drinkDispenser = factory.getDrinkDispenser();
+		sugarDispenser = factory.getSugarDispenser();
 	}
+	
+	@After
+	public void genericVerifications() {
+		verifyNoMoreInteractions(mocks());
+	}
+
 
 	@Test
 	public void createFacade() {
@@ -167,10 +176,6 @@ public abstract class CoffeeMachineTest {
 		doContain(cupDispenser, 1);
 	}
 
-	private void doContain(Dispenser dispenser, Object amount) {
-		when(dispenser.contains(amount)).thenReturn(true);
-	}
-
 	private void verifyBlackPlan(InOrder inOrder) {
 		inOrder.verify(cupDispenser).contains(1);
 		inOrder.verify(waterDispenser).contains(anyDouble());
@@ -181,6 +186,51 @@ public abstract class CoffeeMachineTest {
 		inOrder.verify(display).info(Messages.MIXING);
 		inOrder.verify(coffeePowderDispenser).release(anyDouble());
 		inOrder.verify(waterDispenser).release(anyDouble());
+	}
+	
+	@Test
+	public void twoDrinks() {
+		// Preparing scenario: first drink
+		facade = createFacade(factory);
+		insertCoins(Coin.quarter, Coin.dime);
+		doContainBlackIngredients();
+		facade.select(Drink.BLACK);
+
+		// Preparing scenario: second drink
+		insertCoins(Coin.dime, Coin.quarter);
+		InOrder inOrder = resetMocks();
+		
+		// Simulating returns
+		doContainBlackSugarIngredients();
+		
+		// Operation under test
+		facade.select(Drink.BLACK_SUGAR);
+		
+		// Verification
+		verifyBlackSugarPlan(inOrder);
+		verifyBlackSugarMix(inOrder);
+		verifyDrinkRelease(inOrder);
+	}
+	
+	private void doContainBlackSugarIngredients() {
+		doContainBlackIngredients();
+		doContain(sugarDispenser, anyDouble());
+	}
+
+	private void verifyBlackSugarPlan(InOrder inOrder) {
+		verifyBlackPlan(inOrder);
+		inOrder.verify(sugarDispenser).contains(anyDouble());
+	}
+
+	private void verifyBlackSugarMix(InOrder inOrder) {
+		verifyBlackMix(inOrder);
+		inOrder.verify(sugarDispenser).release(anyDouble());
+	}
+	
+
+
+	private void doContain(Dispenser dispenser, Object amount) {
+		when(dispenser.contains(amount)).thenReturn(true);
 	}
 
 	private void verifyDrinkRelease(InOrder inOrder) {
@@ -218,7 +268,7 @@ public abstract class CoffeeMachineTest {
 
 	private Object[] mocks() {
 		return asArray(display, cashBox, coffeePowderDispenser, waterDispenser,
-				cupDispenser, drinkDispenser);
+				cupDispenser, drinkDispenser, sugarDispenser);
 	}
 
 	private Object[] asArray(Object... objs) {
