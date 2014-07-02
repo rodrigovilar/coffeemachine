@@ -44,6 +44,21 @@ public abstract class CoffeeMachineTest {
 		verify(display).info("Total: US$ 0.10");
 	}
 
+
+	@Test
+	public void insertCoins() {
+		// Preparing scenario
+		facade = createFacade(factory);
+		facade.insertCoin(Coin.halfDollar);
+		resetMocks();
+		
+		// Operation under test
+		facade.insertCoin(Coin.nickel);
+		
+		// Verification
+		verify(display).info("Total: US$ 0.55");
+	}
+	
 	private void resetMocks() {
 		reset(display);
 	}
