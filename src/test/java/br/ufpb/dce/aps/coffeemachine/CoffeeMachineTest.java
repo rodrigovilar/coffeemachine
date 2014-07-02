@@ -30,7 +30,15 @@ public abstract class CoffeeMachineTest {
 		facade = createFacade(factory);
 		
 		// Verification
-		verify(display).info("Insert coins and select a drink!");
+		verifyNewSession(null);
+	}
+
+	private void verifyNewSession(InOrder inOrder) {
+		if (inOrder == null) {
+			verify(display).info(Messages.INSERT_COINS_MESSAGE);
+		} else {
+			inOrder.verify(display).info(Messages.INSERT_COINS_MESSAGE);			
+		}
 	}
 
 	@Test
@@ -43,9 +51,12 @@ public abstract class CoffeeMachineTest {
 		facade.insertCoin(Coin.dime);
 		
 		// Verification
-		verify(display).info("Total: US$ 0.10");
+		verifySessionMoney("0.10");
 	}
 
+	private void verifySessionMoney(String value) {
+		verify(display).info("Total: US$ " + value);
+	}
 
 	@Test
 	public void insertCoins() {
@@ -58,7 +69,7 @@ public abstract class CoffeeMachineTest {
 		facade.insertCoin(Coin.nickel);
 		
 		// Verification
-		verify(display).info("Total: US$ 0.55");
+		verifySessionMoney("0.55");
 	}
 	
 	@Test(expected=CoffeeMachineException.class)
@@ -85,19 +96,50 @@ public abstract class CoffeeMachineTest {
 	public void cancelWithOneCoin() {
 		//Preparing scenario
 		facade = createFacade(factory);
-		facade.insertCoin(Coin.halfDollar);
+		insertCoins(Coin.halfDollar);
 		InOrder inOrder = resetMocks();
 
 		//Operation under test
 		facade.cancel();
 		
 		//Verification
-		inOrder.verify(display).warn(Messages.CANCEL_MESSAGE);
-		inOrder.verify(cashBox).release(Coin.halfDollar);
-		inOrder.verify(display).info(Messages.INSERT_COINS_MESSAGE);
+		verifyCancelMessage(inOrder);
+		verifyReleaseCoins(inOrder, Coin.halfDollar);
+		verifyNewSession(inOrder);
 	}
 
+	@Test
+	public void cancelWithTwoCoins() {
+		//Preparing scenario
+		facade = createFacade(factory);
+		insertCoins(Coin.penny, Coin.nickel);
+		InOrder inOrder = resetMocks();
+		
+		//Operation under test
+		facade.cancel();
+		
+		verifyCancelMessage(inOrder);
+		verifyReleaseCoins(inOrder, Coin.nickel, Coin.penny);
+		verifyNewSession(inOrder);
+	}
+
+
+	private void verifyCancelMessage(InOrder inOrder) {
+		inOrder.verify(display).warn(Messages.CANCEL_MESSAGE);
+	}
 	
+	private void insertCoins(Coin... coins) {
+		for (Coin coin : coins) {
+			facade.insertCoin(coin);			
+		}
+	}
+
+	private void verifyReleaseCoins(InOrder inOrder, Coin... coins) {
+		for (Coin coin : coins) {
+			inOrder.verify(cashBox).release(coin);
+		}
+	}
+
 	private InOrder resetMocks() {
 		reset(mocks());
 		return inOrder(mocks());
