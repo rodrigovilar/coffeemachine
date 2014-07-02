@@ -259,6 +259,28 @@ public abstract class CoffeeMachineTest {
 		verifyNewSession(inOrder);
 	}
 
+	@Test
+	public void cancelAndDrink() {
+		// Preparing scenario: cancel
+		facade = createFacade(factory);
+		insertCoins(Coin.halfDollar);
+		facade.cancel();
+
+		// Preparing scenario: before select
+		insertCoins(Coin.dime, Coin.quarter);
+		InOrder inOrder = resetMocks();
+		
+		// Simulating returns
+		doContainBlackIngredients();
+
+		// Operation under test
+		facade.select(Drink.BLACK);
+		
+		// Verification
+		verifyBlackPlan(inOrder);
+		verifyBlackMix(inOrder);
+		verifyDrinkRelease(inOrder);
+	}
 	
 
 	private void doContain(Dispenser dispenser, Object amount) {
