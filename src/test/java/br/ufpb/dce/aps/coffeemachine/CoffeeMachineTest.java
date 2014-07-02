@@ -118,10 +118,28 @@ public abstract class CoffeeMachineTest {
 		//Operation under test
 		facade.cancel();
 		
+		//Verification
 		verifyCancelMessage(inOrder);
 		verifyReleaseCoins(inOrder, Coin.nickel, Coin.penny);
 		verifyNewSession(inOrder);
 	}
+	
+	@Test
+	public void cancelWithPossibleDifferentChange() {
+		//Preparing scenario
+		facade = createFacade(factory);
+		insertCoins(Coin.quarter, Coin.quarter);
+		InOrder inOrder = resetMocks();
+		
+		//Operation under test
+		facade.cancel();
+		
+		//Verification
+		verifyCancelMessage(inOrder);
+		verifyReleaseCoins(inOrder, Coin.quarter, 2);
+		verifyNewSession(inOrder);
+	}
+
 
 
 	private void verifyCancelMessage(InOrder inOrder) {
@@ -132,6 +150,10 @@ public abstract class CoffeeMachineTest {
 		for (Coin coin : coins) {
 			facade.insertCoin(coin);			
 		}
+	}
+
+	private void verifyReleaseCoins(InOrder inOrder, Coin coin, int times) {
+		inOrder.verify(cashBox, times(times)).release(coin);
 	}
 
 	private void verifyReleaseCoins(InOrder inOrder, Coin... coins) {
