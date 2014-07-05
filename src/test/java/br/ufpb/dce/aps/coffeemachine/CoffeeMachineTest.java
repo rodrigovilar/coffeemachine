@@ -165,6 +165,7 @@ public abstract class CoffeeMachineTest {
 		verifyBlackPlan(inOrder);
 		verifyBlackMix(inOrder);
 		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
 	}
 
 	private void doContainBlackIngredients() {
@@ -204,6 +205,7 @@ public abstract class CoffeeMachineTest {
 		verifyBlackSugarPlan(inOrder);
 		verifyBlackSugarMix(inOrder);
 		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
 	}
 
 	@SuppressWarnings("incomplete-switch")
@@ -281,6 +283,7 @@ public abstract class CoffeeMachineTest {
 		verifyBlackPlan(inOrder);
 		verifyBlackMix(inOrder);
 		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
 	}
 
 	@Test
@@ -370,6 +373,58 @@ public abstract class CoffeeMachineTest {
 		verifyWhitePlan(inOrder);
 		verifyWhiteMix(inOrder);
 		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
+	}
+	
+	@Test
+	public void selectWhiteSugarWithChange() {
+		InOrder inOrder = prepareScenarioWithCoins(Coin.halfDollar);
+
+		// Simulating returns
+		doCount(Coin.dime, 10);
+		doCount(Coin.nickel, 10);
+		doContainWhiteSugarIngredients();
+
+		// Operation under test
+		facade.select(Drink.WHITE_SUGAR);
+
+		// Verification
+		verifyWhiteSugarPlan(inOrder);
+		verifyCount(inOrder, Coin.dime, Coin.nickel);
+		verifyWhiteSugarMix(inOrder);
+		verifyDrinkRelease(inOrder);
+		verifyCloseSession(inOrder, Coin.dime, Coin.nickel);
+	}
+
+
+	private void doCount(Coin coin, int amount) {
+		when(cashBox.count(coin)).thenReturn(amount);
+	}
+
+	private void doContainWhiteSugarIngredients() {
+		doContainWhiteIngredients();
+		doContain(sugarDispenser, anyDouble());
+	}
+
+	private void verifyWhiteSugarPlan(InOrder inOrder) {
+		verifyWhitePlan(inOrder);
+		inOrder.verify(sugarDispenser).contains(anyDouble());
+	}
+
+	private void verifyWhiteSugarMix(InOrder inOrder) {
+		verifyWhiteMix(inOrder);
+		inOrder.verify(sugarDispenser).release(anyDouble());
+	}
+
+	private void verifyCount(InOrder inOrder, Coin... change) {
+		for (Coin coin : change) {
+			inOrder.verify(cashBox).count(coin);
+		}
+	}
+
+	private void verifyCloseSession(InOrder inOrder, Coin... change) {
+		verifyReleaseCoins(inOrder, change);
+		verifyNewSession(inOrder);
 	}
 
 	private void doContainWhiteIngredients() {
@@ -408,7 +463,6 @@ public abstract class CoffeeMachineTest {
 		inOrder.verify(cupDispenser).release(1);
 		inOrder.verify(drinkDispenser).release(anyDouble());
 		inOrder.verify(display).info(Messages.TAKE_DRINK);
-		verifyNewSession(inOrder);
 	}
 
 	private void verifyCancelMessage(InOrder inOrder) {
