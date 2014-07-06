@@ -543,6 +543,23 @@ public abstract class CoffeeMachineTest {
 		verifyNewSession(inOrder);
 	}
 
+	@Test
+	public void whiteSugarIngredientsQuantities() {
+		InOrder inOrder = prepareScenarioWithCoins(Coin.quarter, Coin.dime);
+
+		// Simulating returns
+		doContainWhiteSugarIngredients();
+
+		// Operation under test
+		facade.select(Drink.WHITE_SUGAR);
+
+		// Verification
+		verifyWhiteSugarPlan(inOrder);
+		verifyWhiteSugarMix(inOrder);
+		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
+	}
+
 	private void doCount(Coin coin, int amount) {
 		when(cashBox.count(coin)).thenReturn(amount);
 	}
@@ -554,12 +571,12 @@ public abstract class CoffeeMachineTest {
 
 	private void verifyWhiteSugarPlan(InOrder inOrder) {
 		verifyWhitePlan(inOrder);
-		inOrder.verify(sugarDispenser).contains(anyDouble());
+		inOrder.verify(sugarDispenser).contains(5);
 	}
 
 	private void verifyWhiteSugarMix(InOrder inOrder) {
 		verifyWhiteMix(inOrder);
-		inOrder.verify(sugarDispenser).release(anyDouble());
+		inOrder.verify(sugarDispenser).release(5);
 	}
 
 	private void verifyCount(InOrder inOrder, Coin... change) {
