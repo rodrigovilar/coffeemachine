@@ -492,6 +492,35 @@ public abstract class CoffeeMachineTest {
 		verifyOutOfIngredient(inOrder, Messages.OUT_OF_CREAMER, Coin.dollar);
 	}
 
+	@Test
+	public void blackIngredientsQuantities() {
+		InOrder inOrder = prepareScenarioWithCoins(Coin.quarter, Coin.dime);
+
+		// Simulating returns
+		doContain(coffeePowderDispenser, anyDouble());
+		doContain(waterDispenser, anyDouble());
+		doContain(cupDispenser, 1);
+
+		// Operation under test
+		facade.select(Drink.BLACK);
+
+		// Verification
+		inOrder.verify(cupDispenser).contains(1);
+		inOrder.verify(waterDispenser).contains(100);
+		inOrder.verify(coffeePowderDispenser).contains(15);
+
+		inOrder.verify(display).info(Messages.MIXING);
+		inOrder.verify(coffeePowderDispenser).release(15);
+		inOrder.verify(waterDispenser).release(100);
+
+		inOrder.verify(display).info(Messages.RELEASING);
+		inOrder.verify(cupDispenser).release(1);
+		inOrder.verify(drinkDispenser).release(100);
+		inOrder.verify(display).info(Messages.TAKE_DRINK);
+
+		verifyNewSession(inOrder);		
+	}
+
 	private void doCount(Coin coin, int amount) {
 		when(cashBox.count(coin)).thenReturn(amount);
 	}
