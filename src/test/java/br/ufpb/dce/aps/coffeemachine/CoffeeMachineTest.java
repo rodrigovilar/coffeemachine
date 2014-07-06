@@ -445,6 +445,29 @@ public abstract class CoffeeMachineTest {
 		inOrder.verify(display).warn(Messages.NO_ENOUGHT_CHANGE);
 		verifyCloseSession(inOrder, Coin.halfDollar);
 	}
+	
+	@Test
+	public void selectWhiteWithNonTrivialChange() {
+		InOrder inOrder = prepareScenarioWithCoins(Coin.halfDollar);
+
+		// Simulating returns
+		doCount(Coin.dime, 0);
+		doCount(Coin.nickel, 10);
+		doContainWhiteIngredients();
+
+		// Operation under test
+		facade.select(Drink.WHITE);
+
+		// Verification
+		verifyWhitePlan(inOrder);
+		verifyCount(inOrder, Coin.dime, Coin.nickel);
+		verifyWhiteMix(inOrder);
+		verifyDrinkRelease(inOrder);
+
+		inOrder.verify(cashBox, times(3)).release(Coin.nickel);
+		verifyNewSession(inOrder);
+	}
+
 
 
 	private void doCount(Coin coin, int amount) {
