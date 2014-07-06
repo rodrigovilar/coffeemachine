@@ -13,5 +13,6 @@ public interface Messages {
 	public static final String OUT_OF_CUP = "Out of Cup";
 	public static final String NO_ENOUGHT_MONEY = "Please, insert enought money";
 	public static final String NO_ENOUGHT_CHANGE = "I do not have enought change";
+	public static final String OUT_OF_CREAMER = "Out of Creamer";
 
 }
