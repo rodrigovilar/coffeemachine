@@ -526,6 +526,23 @@ public abstract class CoffeeMachineTest {
 		verifyNewSession(inOrder);
 	}
 
+	@Test
+	public void whiteIngredientsQuantities() {
+		InOrder inOrder = prepareScenarioWithCoins(Coin.quarter, Coin.dime);
+
+		// Simulating returns
+		doContainWhiteIngredients();
+
+		// Operation under test
+		facade.select(Drink.WHITE);
+
+		// Verification
+		verifyWhitePlan(inOrder);
+		verifyWhiteMix(inOrder);
+		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
+	}
+
 	private void doCount(Coin coin, int amount) {
 		when(cashBox.count(coin)).thenReturn(amount);
 	}
@@ -562,13 +579,17 @@ public abstract class CoffeeMachineTest {
 	}
 
 	private void verifyWhitePlan(InOrder inOrder) {
-		verifyBlackPlan(inOrder);
-		inOrder.verify(creamerDispenser).contains(anyDouble());
+		inOrder.verify(cupDispenser).contains(1);
+		inOrder.verify(waterDispenser).contains(80);
+		inOrder.verify(coffeePowderDispenser).contains(15);
+		inOrder.verify(creamerDispenser).contains(20);
 	}
 
 	private void verifyWhiteMix(InOrder inOrder) {
-		verifyBlackMix(inOrder);
-		inOrder.verify(creamerDispenser).release(anyDouble());
+		inOrder.verify(display).info(Messages.MIXING);
+		inOrder.verify(coffeePowderDispenser).release(15);
+		inOrder.verify(waterDispenser).release(80);
+		inOrder.verify(creamerDispenser).release(20);
 	}
 
 	private void verifyOutOfIngredient(InOrder inOrder, String message,
