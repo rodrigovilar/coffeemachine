@@ -396,6 +396,35 @@ public abstract class CoffeeMachineTest {
 		verifyCloseSession(inOrder, Coin.dime, Coin.nickel);
 	}
 
+	@Test
+	public void selectBlackWithoutMoney() {
+		facade = createFacade(factory);
+		InOrder inOrder = resetMocks();
+
+		// Simulating returns
+		doContainBlackIngredients();
+
+		// Operation under test
+		facade.select(Drink.BLACK);
+
+		// Verification
+		inOrder.verify(display).warn(Messages.NO_ENOUGHT_MONEY);
+		verifyCloseSession(inOrder);	
+
+		//Preparing scenario: New session
+		insertCoins(Coin.dime);
+		inOrder = resetMocks();
+
+		// Simulating returns
+		doContainBlackIngredients();
+
+		// Operation under test
+		facade.select(Drink.BLACK);
+
+		// Verification
+		inOrder.verify(display).warn(Messages.NO_ENOUGHT_MONEY);
+		verifyCloseSession(inOrder, Coin.dime);
+	}
 
 	private void doCount(Coin coin, int amount) {
 		when(cashBox.count(coin)).thenReturn(amount);
