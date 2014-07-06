@@ -604,6 +604,26 @@ public abstract class CoffeeMachineTest {
 		verifyCloseSession(inOrder, Coin.quarter);
 	}
 	
+	@Test
+	public void selectBouillonWithoutBouillonPowder() {
+		InOrder inOrder = prepareScenarioWithCoins(Coin.quarter);
+
+		// Simulating returns
+		doNotContain(bouillonDispenser, anyDouble()); // Out of Bouillon
+															// powder!
+		doContain(waterDispenser, anyDouble());
+		doContain(cupDispenser, 1);
+
+		// Operation under test
+		facade.select(Drink.BOUILLON);
+
+		// Verification
+		inOrder.verify(cupDispenser).contains(1);
+		inOrder.verify(waterDispenser).contains(100);
+		inOrder.verify(bouillonDispenser).contains(10);
+		verifyOutOfIngredient(inOrder, Messages.OUT_OF_BOUILLON_POWDER,
+				Coin.quarter);
+	}
 	
 
 	private void verifyBouillonPlan(InOrder inOrder) {
