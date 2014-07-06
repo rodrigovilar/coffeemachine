@@ -21,6 +21,7 @@ public abstract class CoffeeMachineTest {
 	private DrinkDispenser drinkDispenser;
 	private Dispenser sugarDispenser;
 	private Dispenser creamerDispenser;
+	private Dispenser bouillonDispenser;
 
 	protected abstract CoffeeMachine createFacade(ComponentsFactory factory);
 
@@ -35,6 +36,7 @@ public abstract class CoffeeMachineTest {
 		drinkDispenser = factory.getDrinkDispenser();
 		sugarDispenser = factory.getSugarDispenser();
 		creamerDispenser = factory.getCreamerDispenser();
+		bouillonDispenser = factory.getBouillonDispenser();
 	}
 
 	@After
@@ -560,6 +562,37 @@ public abstract class CoffeeMachineTest {
 		verifyNewSession(inOrder);
 	}
 
+	@Test
+	public void selectBouillonWithoutChange() {
+		InOrder inOrder = prepareScenarioWithCoins(Coin.quarter);
+
+		// Simulating returns
+		doContain(bouillonDispenser, anyDouble());
+		doContain(waterDispenser, anyDouble());
+		doContain(cupDispenser, 1);
+
+		// Operation under test
+		facade.select(Drink.BOUILLON);
+
+		// Verification
+		verifyBouillonPlan(inOrder);
+		verifyBouillonMix(inOrder);
+		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
+	}
+
+	private void verifyBouillonPlan(InOrder inOrder) {
+		inOrder.verify(cupDispenser).contains(1);
+		inOrder.verify(waterDispenser).contains(100);
+		inOrder.verify(bouillonDispenser).contains(10);
+	}
+
+	private void verifyBouillonMix(InOrder inOrder) {
+		inOrder.verify(display).info(Messages.MIXING);
+		inOrder.verify(bouillonDispenser).release(10);
+		inOrder.verify(waterDispenser).release(100);
+	}
+
 	private void doCount(Coin coin, int amount) {
 		when(cashBox.count(coin)).thenReturn(amount);
 	}
@@ -658,7 +691,8 @@ public abstract class CoffeeMachineTest {
 
 	private Object[] mocks() {
 		return asArray(display, cashBox, coffeePowderDispenser, waterDispenser,
-				cupDispenser, drinkDispenser, sugarDispenser, creamerDispenser);
+				cupDispenser, drinkDispenser, sugarDispenser, creamerDispenser,
+				bouillonDispenser);
 	}
 
 	private Object[] asArray(Object... objs) {

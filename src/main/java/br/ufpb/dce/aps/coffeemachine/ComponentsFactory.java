@@ -18,4 +18,6 @@ public interface ComponentsFactory {
 
 	Dispenser getCreamerDispenser();
 
+	Dispenser getBouillonDispenser();
+
 }
