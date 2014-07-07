@@ -48,5 +48,14 @@ public class FacadeCreated extends CoffeeMachineTest {
 		verifyCloseSession(inOrder);
 
 	}
-	
+
+	@Test
+	public void readBadgeCode() {
+		// Operation under test
+		facade.readBadge(123456);
+
+		// Verification
+		verifyBadgeRead();
+	}
+
 }

@@ -9,4 +9,6 @@ public interface CoffeeMachine {
 	void select(Drink drink);
 
 	void setFactory(ComponentsFactory factory);
+
+	void readBadge(int badgeCode);
 }

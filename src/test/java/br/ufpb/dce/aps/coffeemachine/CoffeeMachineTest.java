@@ -263,4 +263,8 @@ public class CoffeeMachineTest {
 		return objs;
 	}
 
+	protected void verifyBadgeRead() {
+		verify(display).info(Messages.BADGE_READ);
+	}
+
 }
