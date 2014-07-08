@@ -24,7 +24,7 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		doContain(cupDispenser, 1);
 
 		// Operation under test
-		facade.select(Drink.BLACK);
+		facade.select(Button.BUTTON_1);
 
 		// Verification
 		inOrder.verify(cupDispenser).contains(1);
@@ -41,7 +41,7 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		doContain(cupDispenser, 1);
 
 		// Operation under test
-		facade.select(Drink.BLACK);
+		facade.select(Button.BUTTON_1);
 
 		// Verification
 		inOrder.verify(cupDispenser).contains(1);
@@ -56,7 +56,7 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		doNotContain(cupDispenser, 1); // Out of Cup
 
 		// Operation under test
-		facade.select(Drink.BLACK_SUGAR);
+		facade.select(Button.BUTTON_3);
 
 		// Verification
 		inOrder.verify(cupDispenser).contains(1);
@@ -70,7 +70,7 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		doContainWhiteIngredients();
 
 		// Operation under test
-		facade.select(Drink.WHITE);
+		facade.select(Button.BUTTON_2);
 
 		// Verification
 		verifyWhitePlan(inOrder);
@@ -85,7 +85,7 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		doContainBlackIngredients();
 
 		// Operation under test
-		facade.select(Drink.BLACK);
+		facade.select(Button.BUTTON_1);
 
 		// Verification
 		verifyBlackPlan(inOrder);
@@ -109,7 +109,7 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		doContainBlackIngredients();
 
 		// Operation under test
-		facade.select(Drink.BLACK);
+		facade.select(Button.BUTTON_1);
 
 		// Verification
 		verifyBlackPlan(inOrder);
@@ -124,7 +124,7 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		doContainBlackSugarIngredients();
 
 		// Operation under test
-		facade.select(Drink.BLACK_SUGAR);
+		facade.select(Button.BUTTON_3);
 
 		// Verification
 		verifyBlackSugarPlan(inOrder);
@@ -139,7 +139,7 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		doContainWhiteIngredients();
 
 		// Operation under test
-		facade.select(Drink.WHITE);
+		facade.select(Button.BUTTON_2);
 
 		// Verification
 		verifyWhitePlan(inOrder);
@@ -154,7 +154,7 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		doContainWhiteSugarIngredients();
 
 		// Operation under test
-		facade.select(Drink.WHITE_SUGAR);
+		facade.select(Button.BUTTON_4);
 
 		// Verification
 		verifyWhiteSugarPlan(inOrder);

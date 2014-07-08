@@ -32,7 +32,7 @@ public class ReadBadge extends CoffeeMachineTest {
 		doAcceptBadgeCode();
 		
 		// Operation under test
-		facade.select(Drink.BLACK);
+		facade.select(Button.BUTTON_1);
 
 		// Verification
 		verifyBlackPlan(inOrder);
@@ -49,7 +49,7 @@ public class ReadBadge extends CoffeeMachineTest {
 		doNotAcceptBadgeCode();
 		
 		// Operation under test
-		facade.select(Drink.BOUILLON);
+		facade.select(Button.BUTTON_5);
 
 		// Verification
 		verifyBouillonPlan(inOrder);

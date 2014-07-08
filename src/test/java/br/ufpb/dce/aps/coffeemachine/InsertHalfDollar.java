@@ -34,7 +34,7 @@ public class InsertHalfDollar extends CoffeeMachineTest {
 		doNotContain(sugarDispenser, anyDouble()); // Out of Sugar
 
 		// Operation under test
-		facade.select(Drink.BLACK_SUGAR);
+		facade.select(Button.BUTTON_3);
 
 		// Verification
 		inOrder.verify(cupDispenser).contains(1);
@@ -52,7 +52,7 @@ public class InsertHalfDollar extends CoffeeMachineTest {
 		doContainWhiteSugarIngredients();
 
 		// Operation under test
-		facade.select(Drink.WHITE_SUGAR);
+		facade.select(Button.BUTTON_4);
 
 		// Verification
 		verifyWhiteSugarPlan(inOrder);
@@ -71,7 +71,7 @@ public class InsertHalfDollar extends CoffeeMachineTest {
 		doContainWhiteIngredients();
 
 		// Operation under test
-		facade.select(Drink.WHITE);
+		facade.select(Button.BUTTON_2);
 
 		// Verification
 		verifyWhitePlan(inOrder);
@@ -88,7 +88,7 @@ public class InsertHalfDollar extends CoffeeMachineTest {
 		doContainWhiteIngredients();
 
 		// Operation under test
-		facade.select(Drink.WHITE);
+		facade.select(Button.BUTTON_2);
 
 		// Verification
 		verifyWhitePlan(inOrder);
@@ -109,7 +109,7 @@ public class InsertHalfDollar extends CoffeeMachineTest {
 		doNotContain(creamerDispenser, anyDouble()); // Out of Creamer!
 
 		// Operation under test
-		facade.select(Drink.WHITE);
+		facade.select(Button.BUTTON_2);
 
 		// Verification
 		inOrder.verify(cupDispenser).contains(1);
@@ -126,7 +126,7 @@ public class InsertHalfDollar extends CoffeeMachineTest {
 		doContainBouillonIngredients();
 
 		// Operation under test
-		facade.select(Drink.BOUILLON);
+		facade.select(Button.BUTTON_5);
 
 		// Verification
 		verifyBouillonPlan(inOrder);

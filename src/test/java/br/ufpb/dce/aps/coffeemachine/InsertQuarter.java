@@ -21,7 +21,7 @@ public class InsertQuarter extends CoffeeMachineTest {
 		doContainBouillonIngredients();
 
 		// Operation under test
-		facade.select(Drink.BOUILLON);
+		facade.select(Button.BUTTON_5);
 
 		// Verification
 		verifyBouillonPlan(inOrder);
@@ -39,7 +39,7 @@ public class InsertQuarter extends CoffeeMachineTest {
 		doContain(cupDispenser, 1);
 
 		// Operation under test
-		facade.select(Drink.BOUILLON);
+		facade.select(Button.BUTTON_5);
 
 		// Verification
 		inOrder.verify(cupDispenser).contains(1);

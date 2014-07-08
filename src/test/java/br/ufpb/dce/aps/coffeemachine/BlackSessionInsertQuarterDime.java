@@ -13,7 +13,7 @@ public class BlackSessionInsertQuarterDime extends CoffeeMachineTest {
 		facade = createFacade(factory);
 
 		// Preparing scenario: first drink
-		validSession(Drink.BLACK, Coin.dime, Coin.quarter);
+		validSession(Button.BUTTON_1, Coin.dime, Coin.quarter);
 
 		// Preparing scenario: second drink
 		insertCoins(Coin.quarter, Coin.dime);
@@ -26,7 +26,7 @@ public class BlackSessionInsertQuarterDime extends CoffeeMachineTest {
 		doContainBlackSugarIngredients();
 
 		// Operation under test
-		facade.select(Drink.BLACK_SUGAR);
+		facade.select(Button.BUTTON_3);
 
 		// Verification
 		verifyBlackSugarPlan(inOrder);

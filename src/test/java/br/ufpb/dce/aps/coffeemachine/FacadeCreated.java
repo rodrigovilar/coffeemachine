@@ -41,7 +41,7 @@ public class FacadeCreated extends CoffeeMachineTest {
 		doContainBlackIngredients();
 
 		// Operation under test
-		facade.select(Drink.BLACK);
+		facade.select(Button.BUTTON_1);
 
 		// Verification
 		inOrder.verify(display).warn(Messages.NO_ENOUGHT_MONEY);

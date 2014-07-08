@@ -6,7 +6,7 @@ public interface CoffeeMachine {
 
 	void cancel();
 
-	void select(Drink drink);
+	void select(Button drink);
 
 	void setFactory(ComponentsFactory factory);
 

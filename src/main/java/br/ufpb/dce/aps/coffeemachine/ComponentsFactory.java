@@ -22,4 +22,6 @@ public interface ComponentsFactory {
 
 	PayrollSystem getPayrollSystem();
 
+	ButtonDisplay getButtonDisplay();
+
 }
