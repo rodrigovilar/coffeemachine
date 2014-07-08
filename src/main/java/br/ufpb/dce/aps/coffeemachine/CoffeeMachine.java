@@ -11,4 +11,6 @@ public interface CoffeeMachine {
 	void setFactory(ComponentsFactory factory);
 
 	void readBadge(int badgeCode);
+
+	void setPrice(Button drink, int priceCents);
 }

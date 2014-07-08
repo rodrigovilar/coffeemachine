@@ -1,5 +1,7 @@
 package br.ufpb.dce.aps.coffeemachine;
 
+import static org.mockito.Mockito.verify;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -56,6 +58,53 @@ public class FacadeCreated extends CoffeeMachineTest {
 
 		// Verification
 		verifyBadgeRead(inOrder);
+	}
+	
+	@Test
+	public void cancelWithPossibleDifferentChange() {
+		//Given
+		inOrder = prepareScenarioWithCoins(Coin.quarter, Coin.quarter);
+		
+		// Operation under test
+		facade.cancel();
+
+		// Verification
+		verifyCancelMessage(inOrder);
+		verifyReleaseCoins(inOrder, Coin.quarter, 2);
+		verifyNewSession(inOrder);
+	}
+
+	@Test
+	public void cancelAndDrink() {
+		// Preparing scenario: cancel
+		insertCoins(Coin.halfDollar);
+		facade.cancel();
+		
+		// Preparing scenario: before select
+		insertCoins(Coin.dime, Coin.quarter);
+		inOrder = resetMocks();
+		// Simulating returns
+		doContainBlackIngredients();
+
+		// Operation under test
+		facade.select(Button.BUTTON_1);
+
+		// Verification
+		verifyBlackPlan(inOrder);
+		verifyBlackMix(inOrder);
+		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
+	}
+
+	@Test
+	public void changeDrinkPrice() {
+		// Operation under test
+		facade.setPrice(Button.BUTTON_1, 30);
+
+		// Verification
+		verify(buttonDisplay).show("Black: $0.30", "White: $0.35",
+				"Black with sugar: $0.35", "White with sugar: $0.35",
+				"Bouillon: $0.25", null, null);
 	}
 
 }
