@@ -42,4 +42,20 @@ public class ReadBadge extends CoffeeMachineTest {
 		verifyNewSession(inOrder);
 	}
 
+	@Test
+	public void unknownBadgeCode() {
+		// Simulating returns
+		doContainBouillonIngredients();
+		doNotAcceptBadgeCode();
+		
+		// Operation under test
+		facade.select(Drink.BOUILLON);
+
+		// Verification
+		verifyBouillonPlan(inOrder);
+		verifyPayrollDebit(inOrder, 25, 123456);
+		verifyUnknownBadgeCode(inOrder);
+		verifyNewSession(inOrder);
+	}
+
 }

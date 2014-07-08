@@ -18,5 +18,6 @@ public interface Messages {
 	public static final String BADGE_READ = "Badge read.";
 	public static final String CAN_NOT_INSERT_COINS = "You can not insert coins after reading badge";
 	public static final String CAN_NOT_READ_BADGE = "You can not read badge after inserting coins";
+	public static final String UNKNOWN_BADGE_CODE = "Unknow badge code";
 
 }

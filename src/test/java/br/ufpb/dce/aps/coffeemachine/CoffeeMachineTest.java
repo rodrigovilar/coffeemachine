@@ -285,4 +285,12 @@ public class CoffeeMachineTest {
 		inOrder.verify(payrollSystem).debit(drinkPrice, badgeCode);
 	}
 
+	protected void doNotAcceptBadgeCode() {
+		when(payrollSystem.debit(anyInt(), anyInt())).thenReturn(false);
+	}
+
+	protected void verifyUnknownBadgeCode(InOrder inOrder) {
+		inOrder.verify(display).warn(Messages.UNKNOWN_BADGE_CODE);
+	}
+
 }
