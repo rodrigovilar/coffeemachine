@@ -83,6 +83,7 @@ public class FacadeCreated extends CoffeeMachineTest {
 		// Preparing scenario: before select
 		insertCoins(Coin.dime, Coin.quarter);
 		inOrder = resetMocks();
+
 		// Simulating returns
 		doContainBlackIngredients();
 
@@ -105,6 +106,26 @@ public class FacadeCreated extends CoffeeMachineTest {
 		verify(buttonDisplay).show("Black: $0.30", "White: $0.35",
 				"Black with sugar: $0.35", "White with sugar: $0.35",
 				"Bouillon: $0.25", null, null);
+	}
+
+	@Test
+	public void changeDrinkPriceAndSelectDrink() {
+		// Preparing scenario: change black price and insert coins
+		facade.setPrice(Button.BUTTON_1, 30);
+		insertCoins(Coin.dime, Coin.dime, Coin.dime);
+		inOrder = resetMocks();
+		
+		// Simulating returns
+		doContainBlackIngredients();
+
+		// Operation under test
+		facade.select(Button.BUTTON_1);
+
+		// Verification
+		verifyBlackPlan(inOrder);
+		verifyBlackMix(inOrder);
+		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);		
 	}
 
 }
