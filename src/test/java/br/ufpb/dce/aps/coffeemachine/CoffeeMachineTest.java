@@ -236,6 +236,10 @@ public class CoffeeMachineTest {
 		inOrder.verify(display).warn(Messages.CAN_NOT_INSERT_COINS);
 	}
 
+	protected void verifyCannotReadBadgeMessage(InOrder inOrder) {
+		inOrder.verify(display).warn(Messages.CAN_NOT_READ_BADGE);
+	}
+
 	protected void insertCoins(Coin... coins) {
 		for (Coin coin : coins) {
 			facade.insertCoin(coin);

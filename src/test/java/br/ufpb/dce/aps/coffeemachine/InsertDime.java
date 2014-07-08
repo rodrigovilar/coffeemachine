@@ -26,5 +26,13 @@ public class InsertDime extends CoffeeMachineTest {
 		verifyCloseSession(inOrder, Coin.dime);
 	}
 
+	@Test
+	public void insertCoinReadBadge() {
+		// Operation under test
+		facade.readBadge(123456);
+
+		// Verification
+		verifyCannotReadBadgeMessage(inOrder);
+	}
 
 }
