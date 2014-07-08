@@ -55,7 +55,7 @@ public class FacadeCreated extends CoffeeMachineTest {
 		facade.readBadge(123456);
 
 		// Verification
-		verifyBadgeRead();
+		verifyBadgeRead(inOrder);
 	}
 
 }

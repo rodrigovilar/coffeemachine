@@ -16,5 +16,6 @@ public interface Messages {
 	public static final String OUT_OF_CREAMER = "Out of Creamer";
 	public static final String OUT_OF_BOUILLON_POWDER = "Out of Bouillon Powder";
 	public static final String BADGE_READ = "Badge read.";
+	public static final String CAN_NOT_INSERT_COINS = "You can not insert coins after reading badge";
 
 }
