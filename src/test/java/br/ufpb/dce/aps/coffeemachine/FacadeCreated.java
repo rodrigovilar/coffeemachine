@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.mockito.InOrder;
 
 public class FacadeCreated extends CoffeeMachineTest {
-	
+
 	private InOrder inOrder;
 
 	@Before
@@ -36,7 +36,7 @@ public class FacadeCreated extends CoffeeMachineTest {
 		// Operation under test
 		facade.cancel();
 	}
-	
+
 	@Test
 	public void selectBlackWithoutMoney1() {
 		// Simulating returns
@@ -59,12 +59,12 @@ public class FacadeCreated extends CoffeeMachineTest {
 		// Verification
 		verifyBadgeRead(inOrder);
 	}
-	
+
 	@Test
 	public void cancelWithPossibleDifferentChange() {
-		//Given
+		// Given
 		inOrder = prepareScenarioWithCoins(Coin.quarter, Coin.quarter);
-		
+
 		// Operation under test
 		facade.cancel();
 
@@ -79,7 +79,7 @@ public class FacadeCreated extends CoffeeMachineTest {
 		// Preparing scenario: cancel
 		insertCoins(Coin.halfDollar);
 		facade.cancel();
-		
+
 		// Preparing scenario: before select
 		insertCoins(Coin.dime, Coin.quarter);
 		inOrder = resetMocks();
@@ -99,8 +99,11 @@ public class FacadeCreated extends CoffeeMachineTest {
 
 	@Test
 	public void changeDrinkPrice() {
+		Recipe blackRecipe = blackRecipe();
+		blackRecipe.setPriceCents(30);
+		
 		// Operation under test
-		facade.setPrice(Button.BUTTON_1, 30);
+		facade.configuteDrink(Button.BUTTON_1, blackRecipe);
 
 		// Verification
 		verify(buttonDisplay).show("Black: $0.30", "White: $0.35",
@@ -110,11 +113,14 @@ public class FacadeCreated extends CoffeeMachineTest {
 
 	@Test
 	public void changeDrinkPriceAndSelectDrink() {
+		Recipe blackRecipe = blackRecipe();
+		blackRecipe.setPriceCents(30);
+		
 		// Preparing scenario: change black price and insert coins
-		facade.setPrice(Button.BUTTON_1, 30);
+		facade.configuteDrink(Button.BUTTON_1, blackRecipe);
 		insertCoins(Coin.dime, Coin.dime, Coin.dime);
 		inOrder = resetMocks();
-		
+
 		// Simulating returns
 		doContainBlackIngredients();
 
@@ -125,7 +131,31 @@ public class FacadeCreated extends CoffeeMachineTest {
 		verifyBlackPlan(inOrder);
 		verifyBlackMix(inOrder);
 		verifyDrinkRelease(inOrder);
-		verifyNewSession(inOrder);		
+		verifyNewSession(inOrder);
+	}
+
+	@Test
+	public void changeRecipe() {
+		// Operation under test
+		Recipe blackRecipe = blackRecipe();
+		blackRecipe.addItem(Recipe.WATER, 70.0); // Decrease water amount
+		facade.configuteDrink(Button.BUTTON_1, blackRecipe);
+
+		// Verification
+		verify(buttonDisplay).show("Black: $0.35", "White: $0.35",
+				"Black with sugar: $0.35", "White with sugar: $0.35",
+				"Bouillon: $0.25", null, null);
+	}
+
+	protected Recipe blackRecipe() {
+		Recipe recipe = new Recipe();
+		recipe.setName("Black");
+		recipe.setPriceCents(35);
+
+		recipe.addItem(Recipe.WATER, 70.0);
+		recipe.addItem(Recipe.COFFEE_POWDER, 15.0);
+
+		return recipe;
 	}
 
 }

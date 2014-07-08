@@ -95,14 +95,14 @@ public class CoffeeMachineTest {
 
 	protected void verifyBlackPlan(InOrder inOrder) {
 		inOrder.verify(cupDispenser).contains(1);
-		inOrder.verify(waterDispenser).contains(100);
-		inOrder.verify(coffeePowderDispenser).contains(15);
+		inOrder.verify(waterDispenser).contains(100.0);
+		inOrder.verify(coffeePowderDispenser).contains(15.0);
 	}
 
 	protected void verifyBlackMix(InOrder inOrder) {
 		inOrder.verify(display).info(Messages.MIXING);
-		inOrder.verify(coffeePowderDispenser).release(15);
-		inOrder.verify(waterDispenser).release(100);
+		inOrder.verify(coffeePowderDispenser).release(15.0);
+		inOrder.verify(waterDispenser).release(100.0);
 	}
 
 	@SuppressWarnings("incomplete-switch")
@@ -129,12 +129,12 @@ public class CoffeeMachineTest {
 
 	protected void verifyBlackSugarPlan(InOrder inOrder) {
 		verifyBlackPlan(inOrder);
-		inOrder.verify(sugarDispenser).contains(5);
+		inOrder.verify(sugarDispenser).contains(5.0);
 	}
 
 	protected void verifyBlackSugarMix(InOrder inOrder) {
 		verifyBlackMix(inOrder);
-		inOrder.verify(sugarDispenser).release(5);
+		inOrder.verify(sugarDispenser).release(5.0);
 	}
 
 	protected void verifyCancel(InOrder inOrder, Coin... change) {
@@ -151,14 +151,14 @@ public class CoffeeMachineTest {
 	
 	protected void verifyBouillonPlan(InOrder inOrder) {
 		inOrder.verify(cupDispenser).contains(1);
-		inOrder.verify(waterDispenser).contains(100);
-		inOrder.verify(bouillonDispenser).contains(10);
+		inOrder.verify(waterDispenser).contains(100.0);
+		inOrder.verify(bouillonDispenser).contains(10.0);
 	}
 
 	protected void verifyBouillonMix(InOrder inOrder) {
 		inOrder.verify(display).info(Messages.MIXING);
-		inOrder.verify(bouillonDispenser).release(10);
-		inOrder.verify(waterDispenser).release(100);
+		inOrder.verify(bouillonDispenser).release(10.0);
+		inOrder.verify(waterDispenser).release(100.0);
 	}
 
 	protected void doCount(Coin coin, int amount) {
@@ -172,12 +172,12 @@ public class CoffeeMachineTest {
 
 	protected void verifyWhiteSugarPlan(InOrder inOrder) {
 		verifyWhitePlan(inOrder);
-		inOrder.verify(sugarDispenser).contains(5);
+		inOrder.verify(sugarDispenser).contains(5.0);
 	}
 
 	protected void verifyWhiteSugarMix(InOrder inOrder) {
 		verifyWhiteMix(inOrder);
-		inOrder.verify(sugarDispenser).release(5);
+		inOrder.verify(sugarDispenser).release(5.0);
 	}
 
 	protected void verifyCount(InOrder inOrder, Coin... change) {
@@ -198,16 +198,16 @@ public class CoffeeMachineTest {
 
 	protected void verifyWhitePlan(InOrder inOrder) {
 		inOrder.verify(cupDispenser).contains(1);
-		inOrder.verify(waterDispenser).contains(80);
-		inOrder.verify(coffeePowderDispenser).contains(15);
-		inOrder.verify(creamerDispenser).contains(20);
+		inOrder.verify(waterDispenser).contains(80.0);
+		inOrder.verify(coffeePowderDispenser).contains(15.0);
+		inOrder.verify(creamerDispenser).contains(20.0);
 	}
 
 	protected void verifyWhiteMix(InOrder inOrder) {
 		inOrder.verify(display).info(Messages.MIXING);
-		inOrder.verify(coffeePowderDispenser).release(15);
-		inOrder.verify(waterDispenser).release(80);
-		inOrder.verify(creamerDispenser).release(20);
+		inOrder.verify(coffeePowderDispenser).release(15.0);
+		inOrder.verify(waterDispenser).release(80.0);
+		inOrder.verify(creamerDispenser).release(20.0);
 	}
 
 	protected void verifyOutOfIngredient(InOrder inOrder, String message,
@@ -228,7 +228,7 @@ public class CoffeeMachineTest {
 	protected void verifyDrinkRelease(InOrder inOrder) {
 		inOrder.verify(display).info(Messages.RELEASING);
 		inOrder.verify(cupDispenser).release(1);
-		inOrder.verify(drinkDispenser).release(100);
+		inOrder.verify(drinkDispenser).release(100.0);
 		inOrder.verify(display).info(Messages.TAKE_DRINK);
 	}
 
@@ -268,7 +268,7 @@ public class CoffeeMachineTest {
 	private Object[] mocks() {
 		return asArray(display, cashBox, coffeePowderDispenser, waterDispenser,
 				cupDispenser, drinkDispenser, sugarDispenser, creamerDispenser,
-				bouillonDispenser, payrollSystem);
+				bouillonDispenser, payrollSystem, buttonDisplay);
 	}
 
 	private Object[] asArray(Object... objs) {

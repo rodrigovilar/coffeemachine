@@ -12,5 +12,5 @@ public interface CoffeeMachine {
 
 	void readBadge(int badgeCode);
 
-	void setPrice(Button drink, int priceCents);
+	void configuteDrink(Button drink, Recipe recipe);
 }

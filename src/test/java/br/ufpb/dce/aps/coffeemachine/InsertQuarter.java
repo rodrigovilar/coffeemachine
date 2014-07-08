@@ -43,8 +43,8 @@ public class InsertQuarter extends CoffeeMachineTest {
 
 		// Verification
 		inOrder.verify(cupDispenser).contains(1);
-		inOrder.verify(waterDispenser).contains(100);
-		inOrder.verify(bouillonDispenser).contains(10);
+		inOrder.verify(waterDispenser).contains(100.0);
+		inOrder.verify(bouillonDispenser).contains(10.0);
 		verifyOutOfIngredient(inOrder, Messages.OUT_OF_BOUILLON_POWDER,
 				Coin.quarter);
 	}
