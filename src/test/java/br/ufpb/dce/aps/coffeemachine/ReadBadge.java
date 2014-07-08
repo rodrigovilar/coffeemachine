@@ -16,13 +16,30 @@ public class ReadBadge extends CoffeeMachineTest {
 	}
 
 	@Test
-	public void readBadgeInsertCoin() {
+	public void insertCoin() {
 		// Operation under test
 		insertCoins(Coin.dime);
 
 		// Verification
 		verifyCannotInsertCoinsMessage(inOrder);
 		verifyReleaseCoins(inOrder, Coin.dime);
+	}
+	
+	@Test
+	public void selectBlack() {
+		// Simulating returns
+		doContainBlackIngredients();
+		doAcceptBadgeCode();
+		
+		// Operation under test
+		facade.select(Drink.BLACK);
+
+		// Verification
+		verifyBlackPlan(inOrder);
+		verifyPayrollDebit(inOrder, 35, 123456);
+		verifyBlackMix(inOrder);
+		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
 	}
 
 }

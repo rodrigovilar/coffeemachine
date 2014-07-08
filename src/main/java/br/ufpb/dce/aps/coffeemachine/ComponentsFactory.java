@@ -20,4 +20,6 @@ public interface ComponentsFactory {
 
 	Dispenser getBouillonDispenser();
 
+	PayrollSystem getPayrollSystem();
+
 }

@@ -18,6 +18,7 @@ public class MockComponentsFactory implements ComponentsFactory {
 	private CashBox cashBox;
 	private DrinkDispenser drinkDispenser;
 	private Map<String,Dispenser> dispensers = new HashMap<String, Dispenser>();
+	private PayrollSystem payrollSystem;
 
 	public Display getDisplay() {
 		if (display == null) {
@@ -73,6 +74,14 @@ public class MockComponentsFactory implements ComponentsFactory {
 
 	public Dispenser getBouillonDispenser() {
 		return getDispenser(BOUILLON);
+	}
+
+	public PayrollSystem getPayrollSystem() {
+		if (payrollSystem == null) {
+			payrollSystem = mock(PayrollSystem.class);
+		}
+
+		return payrollSystem;
 	}
 
 }
