@@ -208,4 +208,14 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		facade.configuteDrink(Button.BUTTON_1, blackRecipe);
 	}
 
+	@Test(expected=CoffeeMachineException.class)
+	public void recipeWithUnknownItem() {
+		// Preparing scenario: recipe with unknown item
+		Recipe blackRecipe = blackRecipe();
+		blackRecipe.setItem(Recipe.MILK, 10.0);
+
+		// Operation under test
+		facade.configuteDrink(Button.BUTTON_1, blackRecipe);
+	}
+
 }
