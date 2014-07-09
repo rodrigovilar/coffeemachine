@@ -228,7 +228,7 @@ public class CoffeeMachineTest {
 	protected void verifyDrinkRelease(InOrder inOrder) {
 		inOrder.verify(display).info(Messages.RELEASING);
 		inOrder.verify(cupDispenser).release(1);
-		inOrder.verify(drinkDispenser).release(100.0);
+		inOrder.verify(drinkDispenser).release();
 		inOrder.verify(display).info(Messages.TAKE_DRINK);
 	}
 
