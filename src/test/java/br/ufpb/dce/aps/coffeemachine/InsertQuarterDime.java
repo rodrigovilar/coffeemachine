@@ -163,4 +163,30 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		verifyNewSession(inOrder);
 	}
 
+	@Test
+	public void changeRecipeAndSelectDrink() {
+		// Preparing scenario: decrease water amount and insert coins
+		Recipe blackRecipe = blackRecipe();
+		blackRecipe.setItem(Recipe.WATER, 70.0); 
+		facade.configuteDrink(Button.BUTTON_1, blackRecipe);
+		inOrder = resetMocks();
+
+		// Simulating returns
+		doContainBlackIngredients();
+
+		// Operation under test
+		facade.select(Button.BUTTON_1);
+
+		// Verification
+		inOrder.verify(cupDispenser).contains(1);
+		inOrder.verify(waterDispenser).contains(70.0);
+		inOrder.verify(coffeePowderDispenser).contains(15.0);
+		inOrder.verify(display).info(Messages.MIXING);
+		inOrder.verify(coffeePowderDispenser).release(15.0);
+		inOrder.verify(waterDispenser).release(70.0);
+		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
+	}
+
+
 }

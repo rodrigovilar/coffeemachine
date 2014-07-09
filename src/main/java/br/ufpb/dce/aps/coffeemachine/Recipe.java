@@ -31,7 +31,7 @@ public class Recipe {
 		this.priceCents = priceCents;
 	}
 
-	public void addItem(String ingredient, Double quantity) {
+	public void setItem(String ingredient, Double quantity) {
 		items.put(ingredient, quantity);
 	}
 

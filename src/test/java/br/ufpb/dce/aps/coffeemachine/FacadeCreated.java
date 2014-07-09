@@ -138,7 +138,7 @@ public class FacadeCreated extends CoffeeMachineTest {
 	public void changeRecipe() {
 		// Operation under test
 		Recipe blackRecipe = blackRecipe();
-		blackRecipe.addItem(Recipe.WATER, 70.0); // Decrease water amount
+		blackRecipe.setItem(Recipe.WATER, 70.0); // Decrease water amount
 		facade.configuteDrink(Button.BUTTON_1, blackRecipe);
 
 		// Verification
@@ -146,16 +146,4 @@ public class FacadeCreated extends CoffeeMachineTest {
 				"Black with sugar: $0.35", "White with sugar: $0.35",
 				"Bouillon: $0.25", null, null);
 	}
-
-	protected Recipe blackRecipe() {
-		Recipe recipe = new Recipe();
-		recipe.setName("Black");
-		recipe.setPriceCents(35);
-
-		recipe.addItem(Recipe.WATER, 70.0);
-		recipe.addItem(Recipe.COFFEE_POWDER, 15.0);
-
-		return recipe;
-	}
-
 }

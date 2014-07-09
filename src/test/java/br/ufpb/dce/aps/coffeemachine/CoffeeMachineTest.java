@@ -301,4 +301,15 @@ public class CoffeeMachineTest {
 				"Bouillon: $0.25", null, null);
 	}
 
+	protected Recipe blackRecipe() {
+		Recipe recipe = new Recipe();
+		recipe.setName("Black");
+		recipe.setPriceCents(35);
+	
+		recipe.setItem(Recipe.WATER, 100.0);
+		recipe.setItem(Recipe.COFFEE_POWDER, 15.0);
+	
+		return recipe;
+	}
+
 }
