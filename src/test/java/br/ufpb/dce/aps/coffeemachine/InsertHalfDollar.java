@@ -1,8 +1,7 @@
 package br.ufpb.dce.aps.coffeemachine;
 
 import static org.mockito.Matchers.anyDouble;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -187,6 +186,51 @@ public class InsertHalfDollar extends CoffeeMachineTest {
 		recipe.setItem(Recipe.SUGAR, 15.0);
 		recipe.setPlanSequence(Recipe.WATER, Recipe.SUGAR, Recipe.CREAMER);
 		recipe.setMixSequence(Recipe.WATER, Recipe.CREAMER, Recipe.SUGAR);
+		return recipe;
+	}
+
+	@Test
+	public void newDrinkWithnewDispenser() {
+		// Preparing scenario: add displenser and configure new drink
+		facade.addDispenser(Recipe.CHOCOLATE, chocolateDispenser);
+		facade.addDispenser(Recipe.MILK, milkDispenser);
+		Recipe recipe = chocolatteRecipe();
+		facade.configuteDrink(Button.BUTTON_6, recipe);
+		inOrder = resetMocks();
+
+		// Simulating returns
+		doContain(chocolateDispenser, anyDouble());
+		doContain(milkDispenser, anyDouble());
+		doContain(waterDispenser, anyDouble());
+		doContain(creamerDispenser, anyDouble());
+		doContain(sugarDispenser, anyDouble());
+		doContain(cupDispenser, 1);
+
+		// Operation under test
+		facade.select(Button.BUTTON_6);
+
+		// Verification
+		inOrder.verify(cupDispenser).contains(1);
+		inOrder.verify(milkDispenser).contains(120.0);
+		inOrder.verify(chocolateDispenser).contains(20.0);
+		inOrder.verify(sugarDispenser).contains(5.0);
+		inOrder.verify(display).info(Messages.MIXING);
+		inOrder.verify(milkDispenser).release(120.0);
+		inOrder.verify(chocolateDispenser).release(20.0);
+		inOrder.verify(sugarDispenser).release(5.0);
+		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
+	}
+
+	private Recipe chocolatteRecipe() {
+		Recipe recipe = new Recipe();
+		recipe.setName("Chocolatte");
+		recipe.setPriceCents(50);
+		recipe.setItem(Recipe.MILK, 120.0);
+		recipe.setItem(Recipe.CHOCOLATE, 20.0);
+		recipe.setItem(Recipe.SUGAR, 5.0);
+		recipe.setPlanSequence(Recipe.MILK, Recipe.CHOCOLATE, Recipe.SUGAR);
+		recipe.setMixSequence(Recipe.MILK, Recipe.CHOCOLATE, Recipe.SUGAR);
 		return recipe;
 	}
 

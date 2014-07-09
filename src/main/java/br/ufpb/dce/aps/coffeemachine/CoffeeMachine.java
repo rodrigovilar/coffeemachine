@@ -13,4 +13,6 @@ public interface CoffeeMachine {
 	void readBadge(int badgeCode);
 
 	void configuteDrink(Button drink, Recipe recipe);
+
+	void addDispenser(String ingredient, Dispenser dispenser);
 }

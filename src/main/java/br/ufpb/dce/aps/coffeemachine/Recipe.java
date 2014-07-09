@@ -10,6 +10,8 @@ public class Recipe {
 	public static final String SUGAR = "Sugar";
 	public static final String CREAMER = "Creamer";
 	public static final String BOUILLON = "Bouillon Powder";
+	public static final String MILK = "Milk";
+	public static final String CHOCOLATE = "Chocolate Powder";
 
 	private String name;
 	private Map<String,Double> items = new HashMap<String, Double>();

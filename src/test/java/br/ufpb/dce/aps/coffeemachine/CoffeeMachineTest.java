@@ -18,12 +18,14 @@ public class CoffeeMachineTest {
 	protected Dispenser coffeePowderDispenser;
 	protected Dispenser waterDispenser;
 	protected Dispenser cupDispenser;
-	private DrinkDispenser drinkDispenser;
+	protected DrinkDispenser drinkDispenser;
 	protected Dispenser sugarDispenser;
 	protected Dispenser creamerDispenser;
 	protected Dispenser bouillonDispenser;
-	private PayrollSystem payrollSystem;
+	protected PayrollSystem payrollSystem;
 	protected ButtonDisplay buttonDisplay; 
+	protected Dispenser chocolateDispenser = mock(Dispenser.class);
+	protected Dispenser milkDispenser = mock(Dispenser.class);
 
 	protected final CoffeeMachine createFacade(ComponentsFactory factory) {
 		
@@ -265,10 +267,11 @@ public class CoffeeMachineTest {
 		return inOrder(mocks());
 	}
 
-	private Object[] mocks() {
+	protected Object[] mocks() {
 		return asArray(display, cashBox, coffeePowderDispenser, waterDispenser,
 				cupDispenser, drinkDispenser, sugarDispenser, creamerDispenser,
-				bouillonDispenser, payrollSystem, buttonDisplay);
+				bouillonDispenser, payrollSystem, buttonDisplay, chocolateDispenser, 
+				milkDispenser);
 	}
 
 	private Object[] asArray(Object... objs) {
