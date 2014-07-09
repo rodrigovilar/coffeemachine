@@ -188,4 +188,12 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		verifyNewSession(inOrder);
 	}
 
+	@Test(expected=CoffeeMachineException.class)
+	public void recipeWithoutPrice() {
+		// Preparing scenario: recipe without price
+		Recipe blackRecipe = blackRecipe();
+		blackRecipe.setPriceCents(0); 
+		facade.configuteDrink(Button.BUTTON_1, blackRecipe);
+	}
+
 }
