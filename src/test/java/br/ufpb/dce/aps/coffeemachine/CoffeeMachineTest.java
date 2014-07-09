@@ -308,7 +308,10 @@ public class CoffeeMachineTest {
 	
 		recipe.setItem(Recipe.WATER, 100.0);
 		recipe.setItem(Recipe.COFFEE_POWDER, 15.0);
-	
+
+		recipe.setPlanSequence(Recipe.WATER, Recipe.COFFEE_POWDER);
+		recipe.setMixSequence(Recipe.COFFEE_POWDER, Recipe.WATER);
+
 		return recipe;
 	}
 

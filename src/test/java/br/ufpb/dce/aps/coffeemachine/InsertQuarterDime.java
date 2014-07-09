@@ -188,5 +188,4 @@ public class InsertQuarterDime extends CoffeeMachineTest {
 		verifyNewSession(inOrder);
 	}
 
-
 }

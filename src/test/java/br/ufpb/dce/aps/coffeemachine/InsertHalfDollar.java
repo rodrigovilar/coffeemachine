@@ -2,6 +2,7 @@ package br.ufpb.dce.aps.coffeemachine;
 
 import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -143,6 +144,50 @@ public class InsertHalfDollar extends CoffeeMachineTest {
 
 		// Verification
 		verifySessionMoney("0.55");
+	}
+
+	@Test
+	public void newDrink() {
+		// Preparing scenario: configure new drink
+		Recipe recipe = sweetCreamRecipe();
+		facade.configuteDrink(Button.BUTTON_6, recipe);
+
+		// Simulating returns
+		doContain(waterDispenser, anyDouble());
+		doContain(creamerDispenser, anyDouble());
+		doContain(sugarDispenser, anyDouble());
+		doContain(cupDispenser, 1);
+
+		// Operation under test
+		facade.select(Button.BUTTON_6);
+
+		// Verification
+		verify(buttonDisplay).show("Black: $0.35", "White: $0.35",
+				"Black with sugar: $0.35", "White with sugar: $0.35",
+				"Bouillon: $0.25", "Sweet cream: $0.50", null);
+
+		inOrder.verify(cupDispenser).contains(1);
+		inOrder.verify(waterDispenser).contains(100.0);
+		inOrder.verify(sugarDispenser).contains(15.0);
+		inOrder.verify(creamerDispenser).contains(25.0);
+		inOrder.verify(display).info(Messages.MIXING);
+		inOrder.verify(waterDispenser).release(100.0);
+		inOrder.verify(creamerDispenser).release(25.0);
+		inOrder.verify(sugarDispenser).release(15.0);
+		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
+	}
+
+	private Recipe sweetCreamRecipe() {
+		Recipe recipe = new Recipe();
+		recipe.setName("Sweet cream");
+		recipe.setPriceCents(50);
+		recipe.setItem(Recipe.WATER, 100.0);
+		recipe.setItem(Recipe.CREAMER, 25.0);
+		recipe.setItem(Recipe.SUGAR, 15.0);
+		recipe.setPlanSequence(Recipe.WATER, Recipe.SUGAR, Recipe.CREAMER);
+		recipe.setMixSequence(Recipe.WATER, Recipe.CREAMER, Recipe.SUGAR);
+		return recipe;
 	}
 
 }

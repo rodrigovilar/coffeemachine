@@ -14,6 +14,8 @@ public class Recipe {
 	private String name;
 	private Map<String,Double> items = new HashMap<String, Double>();
 	private int priceCents;
+	private String[] planSequence;
+	private String[] mixSequence;
 
 	public String getName() {
 		return name;
@@ -39,4 +41,20 @@ public class Recipe {
 		return items.get(ingredient);
 	}
 
+	public void setPlanSequence(String... planSequence) {
+		this.planSequence = planSequence;
+	}
+
+	public void setMixSequence(String... mixSequence) {
+		this.mixSequence = mixSequence;
+	}
+
+	public String[] getPlanSequence() {
+		return planSequence;
+	}
+
+	public String[] getMixSequence() {
+		return mixSequence;
+	}
+	
 }
