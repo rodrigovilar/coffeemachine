@@ -18,6 +18,7 @@ public class Recipe {
 	private int priceCents;
 	private String[] planSequence;
 	private String[] mixSequence;
+	private boolean steamed;
 
 	public String getName() {
 		return name;
@@ -62,5 +63,12 @@ public class Recipe {
 	public String[] getMixSequence() {
 		return mixSequence;
 	}
+
+	public void setSteamed(boolean steamed) {
+		this.steamed = steamed;
+	}
 	
+	public boolean isSteamed() {
+		return steamed;
+	}
 }

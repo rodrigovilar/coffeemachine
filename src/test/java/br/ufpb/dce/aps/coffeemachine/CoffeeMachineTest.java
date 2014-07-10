@@ -26,6 +26,7 @@ public class CoffeeMachineTest {
 	protected ButtonDisplay buttonDisplay; 
 	protected Dispenser chocolateDispenser = mock(Dispenser.class);
 	protected Dispenser milkDispenser = mock(Dispenser.class);
+	protected Steamer steamer;
 
 	protected final CoffeeMachine createFacade(ComponentsFactory factory) {
 		
@@ -64,6 +65,7 @@ public class CoffeeMachineTest {
 		bouillonDispenser = factory.getBouillonDispenser();
 		payrollSystem = factory.getPayrollSystem();
 		buttonDisplay = factory.getButtonDisplay();
+		steamer = factory.getSteamer();
 	}
 
 	@After
@@ -271,7 +273,7 @@ public class CoffeeMachineTest {
 		return asArray(display, cashBox, coffeePowderDispenser, waterDispenser,
 				cupDispenser, drinkDispenser, sugarDispenser, creamerDispenser,
 				bouillonDispenser, payrollSystem, buttonDisplay, chocolateDispenser, 
-				milkDispenser);
+				milkDispenser, steamer);
 	}
 
 	private Object[] asArray(Object... objs) {

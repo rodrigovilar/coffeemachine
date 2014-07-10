@@ -10,7 +10,7 @@ import org.mockito.InOrder;
 public class InsertHalfDollar extends CoffeeMachineTest {
 	
 	private InOrder inOrder;
-
+	
 	@Before
 	public void given() {
 		inOrder = prepareScenarioWithCoins(Coin.halfDollar);
@@ -190,8 +190,8 @@ public class InsertHalfDollar extends CoffeeMachineTest {
 	}
 
 	@Test
-	public void newDrinkWithnewDispenser() {
-		// Preparing scenario: add displenser and configure new drink
+	public void newDrinkWithNewDispenser() {
+		// Preparing scenario: add dispenser and configure new drink
 		facade.addDispenser(Recipe.CHOCOLATE, chocolateDispenser);
 		facade.addDispenser(Recipe.MILK, milkDispenser);
 		Recipe recipe = chocolatteRecipe();
@@ -231,6 +231,42 @@ public class InsertHalfDollar extends CoffeeMachineTest {
 		recipe.setItem(Recipe.SUGAR, 5.0);
 		recipe.setPlanSequence(Recipe.MILK, Recipe.CHOCOLATE, Recipe.SUGAR);
 		recipe.setMixSequence(Recipe.MILK, Recipe.CHOCOLATE, Recipe.SUGAR);
+		return recipe;
+	}
+
+	@Test
+	public void drinkWithSteamer() {
+		// Preparing scenario: add dispenser and configure new drink
+		facade.addDispenser(Recipe.MILK, milkDispenser);
+		Recipe recipe = steamedMilk();
+		facade.configuteDrink(Button.BUTTON_6, recipe);
+		inOrder = resetMocks();
+
+		// Simulating returns
+		doContain(milkDispenser, anyDouble());
+		doContain(cupDispenser, 1);
+
+		// Operation under test
+		facade.select(Button.BUTTON_6);
+
+		// Verification
+		inOrder.verify(cupDispenser).contains(1);
+		inOrder.verify(milkDispenser).contains(150.0);
+		inOrder.verify(display).info(Messages.MIXING);
+		inOrder.verify(milkDispenser).release(150.0);
+		inOrder.verify(steamer).steam();
+		verifyDrinkRelease(inOrder);
+		verifyNewSession(inOrder);
+	}
+
+	private Recipe steamedMilk() {
+		Recipe recipe = new Recipe();
+		recipe.setName("Steamed milk");
+		recipe.setPriceCents(50);
+		recipe.setItem(Recipe.MILK, 150.0);
+		recipe.setPlanSequence(Recipe.MILK);
+		recipe.setMixSequence(Recipe.MILK);
+		recipe.setSteamed(true);
 		return recipe;
 	}
 

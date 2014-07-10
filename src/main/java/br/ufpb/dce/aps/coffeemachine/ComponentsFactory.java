@@ -24,4 +24,6 @@ public interface ComponentsFactory {
 
 	ButtonDisplay getButtonDisplay();
 
+	Steamer getSteamer();
+
 }

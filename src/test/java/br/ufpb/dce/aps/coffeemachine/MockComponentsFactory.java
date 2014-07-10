@@ -20,6 +20,7 @@ public class MockComponentsFactory implements ComponentsFactory {
 	private Map<String,Dispenser> dispensers = new HashMap<String, Dispenser>();
 	private PayrollSystem payrollSystem;
 	private ButtonDisplay buttonDisplay;
+	private Steamer steamer;
 
 	public Display getDisplay() {
 		if (display == null) {
@@ -91,6 +92,14 @@ public class MockComponentsFactory implements ComponentsFactory {
 		}
 
 		return buttonDisplay;
+	}
+
+	public Steamer getSteamer() {
+		if (steamer == null) {
+			steamer = mock(Steamer.class);
+		}
+
+		return steamer;
 	}
 
 }
