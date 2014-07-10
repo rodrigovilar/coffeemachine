@@ -270,15 +270,4 @@ public class InsertHalfDollar extends CoffeeMachineTest {
 		return recipe;
 	}
 
-	@Test(expected=CoffeeMachineException.class)
-	public void steamWithoutMilk() {
-		// Preparing scenario: configure fake drink
-		Recipe recipe = blackRecipe();
-		recipe.setName("Fake black steamed");
-		recipe.setSteamed(true);
-
-		// Operation under test
-		facade.configuteDrink(Button.BUTTON_6, recipe);
-	}
-
 }

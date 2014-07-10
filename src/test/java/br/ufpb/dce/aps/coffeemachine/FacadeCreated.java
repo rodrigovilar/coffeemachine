@@ -146,4 +146,22 @@ public class FacadeCreated extends CoffeeMachineTest {
 				"Black with sugar: $0.35", "White with sugar: $0.35",
 				"Bouillon: $0.25", null, null);
 	}
+	
+	@Test(expected=CoffeeMachineException.class)
+	public void steamWithoutMilk() {
+		// Preparing scenario: configure fake drink
+		Recipe recipe = blackRecipe();
+		recipe.setName("Fake black steamed");
+		recipe.setSteamed(true);
+
+		// Operation under test
+		facade.configuteDrink(Button.BUTTON_6, recipe);
+	}
+
+	@Test(expected=CoffeeMachineException.class)
+	public void selectUnusedButton() {
+		// Operation under test
+		facade.select(Button.BUTTON_6);
+	}
+
 }
