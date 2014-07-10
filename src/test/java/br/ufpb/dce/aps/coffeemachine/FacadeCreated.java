@@ -164,4 +164,10 @@ public class FacadeCreated extends CoffeeMachineTest {
 		facade.select(Button.BUTTON_6);
 	}
 
+	@Test(expected=CoffeeMachineException.class)
+	public void selectNullButton() {
+		// Operation under test
+		facade.select(null);
+	}
+
 }
